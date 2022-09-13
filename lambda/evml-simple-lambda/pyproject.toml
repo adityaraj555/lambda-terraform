@@ -1,0 +1,40 @@
+[tool.poetry]
+name = "evml-simple-lambda"
+version = "0.1.0"
+description = "Service for fetching lambda info"
+authors = ["ml-evin <ml-evin@eagleview.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+evmlio = "0.1.8"
+loguru = "^0.6.0"
+pygeohash = "^1.2.0"
+
+[tool.poetry.dev-dependencies]
+black = "^22.3.0"
+
+[[tool.poetry.source]]
+name = "ev"
+url = "https://eagleview.jfrog.io/artifactory/api/pypi/pypi-local/simple/"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+exclude = '''
+/(
+      .eggs         # exclude a few common directories in the
+    | .git          # root of the project
+    | .hg
+    | .mypy_cache
+    | .tox
+    | venv
+    | _build
+    | buck-out
+    | build
+    | dist
+  )/
+'''
+include = '\.pyi?$'
+line-length = 100

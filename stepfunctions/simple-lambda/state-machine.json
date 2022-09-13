@@ -1,0 +1,96 @@
+{
+    "Comment": "EVML Simple Lambda Workflow",
+    "StartAt": "Parallel",
+    "States": {
+        "Parallel": {
+            "Type": "Parallel",
+            "Next": "NotifySuccessResult",
+            "Branches": [
+                {
+                    "StartAt": "InvokeSimpleLambda",
+                    "States": {
+                        "InvokeSimpleLambda": {
+                            "Type": "Task",
+                            "Resource": "arn:aws:states:::lambda:invoke",
+                            "ResultSelector": {
+                                "response.$": "$.Payload"
+                            },
+                            "ResultPath": "$.InvokeSimpleLambda",
+                            "OutputPath": "$",
+                            "Parameters": {
+                                "FunctionName": "arn:aws:lambda:${region}:${resource_name_prefix}-lambda-evml-simple-lambda:$LATEST",
+                                "Payload": {
+                                    "latitude.$": "States.Array($$.Execution.Input.latitude)",
+                                    "longitude.$": "States.Array($$.Execution.Input.longitude)"
+                                }
+                            },
+                            "Retry": [
+                                {
+                                    "ErrorEquals": [
+                                        "Lambda.ServiceException",
+                                        "Lambda.AWSLambdaException",
+                                        "Lambda.SdkClientException"
+                                    ],
+                                    "IntervalSeconds": 2,
+                                    "MaxAttempts": 3,
+                                    "BackoffRate": 2
+                                }
+                            ],
+                            "TimeoutSeconds": 120,
+                            "End": true
+                        }
+                    }
+                }
+            ],
+            "Catch": [
+                {
+                    "ErrorEquals": [
+                        "States.ALL"
+                    ],
+                    "Next": "NotifyFailureResult"
+                }
+            ]
+        },
+        "NotifySuccessResult": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::lambda:invoke",
+            "ResultSelector": {
+                "response.$": "$.Payload"
+            },
+            "OutputPath": "$",
+            "Parameters": {
+                "FunctionName": "arn:aws:lambda:${region}:${resource_name_prefix}-lambda-evml-simple-notify-result:$LATEST",
+                "Payload": {
+                    "jobId.$": "$$.Execution.Input.jobId",
+                    "state": "success",
+                    "info.$": "$[0].InvokeSimpleLambda.response.info",
+                    "callbackId.$": "$$.Execution.Input.meta.callbackId",
+                    "callbackUrl.$": "$$.Execution.Input.meta.callbackUrl"
+                }
+            },
+            "End": true
+        },
+        "NotifyFailureResult": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::lambda:invoke",
+            "ResultSelector": {
+                "response.$": "$.Payload"
+            },
+            "OutputPath": "$",
+            "Parameters": {
+                "FunctionName": "arn:aws:lambda:${region}:${resource_name_prefix}-lambda-evml-simple-notify-result:$LATEST",
+                "Payload": {
+                    "jobId.$": "$$.Execution.Input.jobId",
+                    "state": "failure",
+                    "Cause.$": "States.StringToJson($.Cause)",
+                    "callbackId.$": "$$.Execution.Input.meta.callbackId",
+                    "callbackUrl.$": "$$.Execution.Input.meta.callbackUrl"
+                }
+            },
+            "Next": "Failed"
+        },
+        "Failed": {
+            "Type": "Fail"
+        }
+    }
+}
