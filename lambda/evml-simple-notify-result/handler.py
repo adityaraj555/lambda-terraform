@@ -27,7 +27,7 @@ def lambda_handler(event: Any, context: Dict):
     logger.info(f"Recieved Event Message : {json.dumps(event, indent=2)}")
     job_id = event.get("jobId", None)
     internal_response_queue_url = os.getenv(
-        "internal_response_queue_url", "app-dev-1x0-sqs-simple-lambda-test-response-queue"
+        "internal_response_queue_url", "app-sandbox-1x0-sqs-simple-lambda-test-response-queue"
     )
     state = event.get("state", None)
     info = event.get("info", None)
