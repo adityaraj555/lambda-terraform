@@ -1,7 +1,7 @@
 def accountmap = [
   'platform-dev':'356071200662',
   'platform-test':'952028532360',
-  'sandbox':'280563037387'
+  'sandbox':'280563037387',
 ]
 pipeline {
   agent {
