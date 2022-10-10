@@ -11,7 +11,7 @@ from common_utils.exceptions import handle_exception
 from loguru import logger
 
 loop = asyncio.get_event_loop()
-ENV = os.getenv("ENV", default="sandbox")
+ENV = os.getenv("ENV", default="sbox")
 max_retries = 5
 
 

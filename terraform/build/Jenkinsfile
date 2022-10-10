@@ -5,8 +5,8 @@ import org.eagleview.TerraformChoices
 def deploymentTargetChoices = TerraformChoices.getdeploymentTargetChoices()
 def fullTestDeploymentManualVerificationTimeChoices = TerraformChoices.getfullTestDeploymentManualVerificationTimeChoices()
 def deploymentTargetBranchMapOverrides = [
-    develop: "feature/create-simple-lambda",
-    test: "feature/create-simple-lambda",
+    //develop: "feature/create-simple-lambda",
+    //test: "feature/create-simple-lambda",
     sandbox: "feature/sandbox"
 ]
 

@@ -1,6 +1,6 @@
 
 module "config" {
-  source = "git::https://github.eagleview.com/engineering/terraform-simple-lambda-config.git//${platform_choice}${test_config_branch}"
+  source = "git::https://github.eagleview.com/engineering/evml-building-detection-terraform-config.git//${platform_choice}${test_config_branch}"
 }
 
 module "lambda" {
