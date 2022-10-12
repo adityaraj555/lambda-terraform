@@ -22,11 +22,13 @@ def lambda_handler(event: Any, context: Dict):
     Returns:
         Dict: Returns the status of invocation
     """
-
-    sfn_client = boto3.client(
-        "stepfunctions", region_name=os.getenv("AWS_REGION", default="us-east-2")
+    #setup the batch client
+    batch_client = boto3.client(
+        "batch", region_name=os.getenv("AWS_REGION", default="us-east-2")
     )
-    state_machine_arn = os.getenv("STATE_MACHINE_ARN")
+    jobname  = os.environ['jobName']
+    jobqueue = os.environ['JobQueue']
+    jobdefinition = os.environ['JobDefinition']
 
     logger.info(f"Recieved Event Message : {json.dumps(event, indent=2)}")
 
@@ -43,16 +45,20 @@ def lambda_handler(event: Any, context: Dict):
                 handle_exception(ErrorCatalog.RequiredKeyNotInInput.value)
 
             try:
-                sfn_response = sfn_client.start_execution(
-                    stateMachineArn=state_machine_arn, input=json.dumps(payload)
+                #submit the job
+                batch_response = batch_client.submit_job(
+                    jobName=jobName,
+                    jobQueue=jobqueue
+                    jobDefinition=jobdefinition
                 )
-                logger.debug(f"Response from start execution request: {sfn_response}")
+                logger.debug(f"Response from start execution request: {batch_response}")
 
-                execution_arn = sfn_response.get("executionArn", None)
+                job_id = batch_response.get['jobId']
+                #resp = batch_client.describe_jobs(jobs=[job_id])
 
                 return {
                     "status": "success",
-                    "executionArn": execution_arn,
+                    "job_id": job_id,
                     "msg": "Successfully trigerred Step Function",
                     "status_code": "200",
                 }
