@@ -26,8 +26,9 @@ def lambda_handler(event: Any, context: Dict):
     batch_client = boto3.client(
         "batch", region_name=os.getenv("AWS_REGION", default="us-east-2")
     )
+    jobname  = os.environ['jobName']
     jobqueue = os.environ['JobQueue']
-    jobDefinition = os.environ['JobDefinition']
+    jobdefinition = os.environ['JobDefinition']
 
     logger.info(f"Recieved Event Message : {json.dumps(event, indent=2)}")
 
@@ -46,18 +47,18 @@ def lambda_handler(event: Any, context: Dict):
             try:
                 #submit the job
                 batch_response = batch_client.submit_job(
-                    jobName='string',
-                    jobQueue='string', 
-                    jobDefinition='string'
+                    jobName=jobName,
+                    jobQueue=jobqueue
+                    jobDefinition=jobdefinition
                 )
                 logger.debug(f"Response from start execution request: {batch_response}")
 
                 job_id = batch_response.get['jobId']
-                resp = batch_client.describe_jobs(jobs=[job_id])
+                #resp = batch_client.describe_jobs(jobs=[job_id])
 
                 return {
                     "status": "success",
-                    "job_id": resp,
+                    "job_id": job_id,
                     "msg": "Successfully trigerred Step Function",
                     "status_code": "200",
                 }
