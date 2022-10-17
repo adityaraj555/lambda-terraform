@@ -1,6 +1,6 @@
 locals {
   test_build           = var.build_number != ""
-  resource_name_prefix = local.test_build ? "tb-${var.build_number}-simple-lambda-sbox-1x0" : module.config.environment_config_map.resource_name_prefix
+  resource_name_prefix = local.test_build ? "tb-${var.build_number}-simple-batch-job-sbox-1x0" : module.config.environment_config_map.resource_name_prefix
   region               = module.config.environment_config_map.region
   account_id           = module.config.environment_config_map.account_id
   default_provider_tags = {

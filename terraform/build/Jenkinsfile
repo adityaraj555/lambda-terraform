@@ -7,7 +7,7 @@ def fullTestDeploymentManualVerificationTimeChoices = TerraformChoices.getfullTe
 def deploymentTargetBranchMapOverrides = [
     //develop: "feature/create-simple-lambda",
     //test: "feature/create-simple-lambda",
-    sandbox: "feature/sandbox"
+    sandbox: "feature/batch"
 ]
 
 String deploymentStack = "terraform/evml"
