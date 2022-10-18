@@ -39,7 +39,7 @@ def lambda_handler(event: Any, context: Dict):
     )
     logger.debug(f"Response from started batch job execution request: {batch_response}")
 
-    job_id = batch_response.get['jobId']
+    job_id = batch_response['jobId']
     #resp = batch_client.describe_jobs(jobs=[job_id])
 
     return {
