@@ -26,21 +26,22 @@ def lambda_handler(event: Any, context: Dict):
     batch_client = boto3.client(
         "batch", region_name=os.getenv("AWS_REGION", default="us-east-2")
     )
-    jobname  = os.environ['jobName']
-    jobqueue = os.environ['JobQueue']
-    jobdefinition = os.environ['JobDefinition']
+    job_name  = os.environ['job_name']
+    job_queues = os.environ['job_queues']
+    job_definitions = os.environ['job_definitions']
 
     print("aws batch triggered successfully")
   
     batch_response = batch_client.submit_job(
-        jobName=jobName,
-        jobQueue=jobqueue,
-        jobDefinition=jobdefinition
+        jobName=job_name,
+        jobQueue=job_queues,
+        jobDefinition=job_definitions
     )
     logger.debug(f"Response from started batch job execution request: {batch_response}")
 
+    #fetching job_id  as  job result
     job_id = batch_response['jobId']
-    #resp = batch_client.describe_jobs(jobs=[job_id])
+    
 
     return {
          "status": "success",

@@ -14,7 +14,7 @@ pipeline {
   }
   parameters {
     string(name: "DOMAIN",             defaultValue: "evml",      description: "Platform Domain Name")
-    choice(name: "LAMBDA",             choices: ["evml-start-batch-fn","evml-simple-batch_task"],    description: "Select the lambda for deploy")
+    choice(name: "LAMBDA",             choices: ["evml_start_batch_fn","evml_simple_batch_task"],    description: "Select the lambda function for deploy")
     choice(name: "ECR_ACCOUNT_ID",     choices: "176992832580",                      description: "ECR account ID (default: platform-ci)")
     choice(name: "ECR_REGION",         choices: "us-east-2",                         description: "ECR region")
     string(name: "TAG_NAME",           defaultValue: '',                             description: "ECR Image TagName default: \${REVISION}.\${BUILD_NUMBER}")

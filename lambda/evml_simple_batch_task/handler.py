@@ -1,8 +1,9 @@
-#just testing very_simple python script
+#just testing simple_batch_job  python script
+
 import json
 import boto3
 
-print("successfully executed BATCH JOB")
+print("successfully connected SIMPLE_BATCH_JOB")
 
 def lambda_handler(event, context):
     
