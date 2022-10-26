@@ -3,7 +3,7 @@
 import json
 import boto3
 
-print("successfully connected SIMPLE_BATCH_JOB")
+print("successfully connected SIMPLE-BATCH-JOB")
 
 def lambda_handler(event, context):
     
