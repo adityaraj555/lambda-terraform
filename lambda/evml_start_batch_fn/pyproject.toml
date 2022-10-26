@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "evml-start-sfn"
+name = "evml-start-batch"
 version = "0.1.0"
-description = "Service for invoking Step Function Workflow"
+description = "Service for invoking Batch Function Workflow"
 authors = ["ml-evin <ml-evin@eagleview.com>"]
 
 [tool.poetry.dependencies]
