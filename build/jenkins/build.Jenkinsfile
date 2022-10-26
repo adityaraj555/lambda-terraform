@@ -77,6 +77,49 @@ pipeline {
     }
   }
 
-
+  post {
+    success {
+      withCredentials([string(credentialsId: "${env.SLACK_CREDENTIALS}", variable: "SLACK_TOKEN")]) {
+      slackSend(
+        teamDomain: "eagleview",
+          channel: "#evml-cicd",
+          token: "$SLACK_TOKEN",
+        color: "good",
+        message: """
+BUILT LAMBDA *${env.LAMBDA}* <${BUILD_URL}|${BUILD_DISPLAY_NAME}>
+```
+  LAMBDA:       ${env.LAMBDA}
+  DOMAIN:        ${env.DOMAIN}
+  BRANCH:        ${env.GIT_BRANCH}
+  REVISION:      ${env.REVISION}
+  BUILD_NUMBER:  ${env.BUILD_NUMBER}
+  ECR_IMAGE:     ${env.ECR_IMAGE}
+```
+"""
+      )
+    }
+    }
+    failure {
+      withCredentials([string(credentialsId: "${env.SLACK_CREDENTIALS}", variable: "SLACK_TOKEN")]) {
+      slackSend(
+        teamDomain: "eagleview",
+          channel: "#evml-cicd",
+          token: "$SLACK_TOKEN",
+        color: "danger",
+        message: """
+FAILED TO BUILD LAMBDA *${env.LAMBDA}* <${BUILD_URL}|${BUILD_DISPLAY_NAME}>
+```
+  LAMBDA:       ${env.LAMBDA}
+  DOMAIN:        ${env.DOMAIN}
+  BRANCH:        ${env.GIT_BRANCH}
+  REVISION:      ${env.REVISION}
+  BUILD_NUMBER:  ${env.BUILD_NUMBER}
+  ECR_IMAGE:     ${env.ECR_IMAGE}
+```
+"""
+      )
+    }
+  }
+ }
 
 }
